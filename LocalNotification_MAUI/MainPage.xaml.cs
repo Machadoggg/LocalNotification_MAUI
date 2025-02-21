@@ -1,24 +1,32 @@
-﻿namespace LocalNotification_MAUI
+﻿using Plugin.LocalNotification;
+
+namespace LocalNotification_MAUI
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private void OnSendNotification(object sender, EventArgs e)
         {
-            count++;
+            var request = new NotificationRequest
+            {
+                NotificationId = 1000,
+                Title = "App Name",
+                Subtitle = "Hello",
+                Description = "Description",
+                BadgeNumber = 42,
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = DateTime.Now.AddSeconds(5),
+                    NotifyRepeatInterval = TimeSpan.FromDays(1),
+                }
+            };
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            LocalNotificationCenter.Current.Show(request);
         }
     }
 
